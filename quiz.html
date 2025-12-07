@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <h1>Quiz</h1>
+<div id="quiz-level" class="quiz-level"></div>
+    <div id="quiz-box" class="container">
+         <div id="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+    <div style="display: flex; justify-content: space-around; width: 100%;">
+    <div id="score-display">Score: 0</div>
+<div id="timer">Time: 15s</div></div>
+<div id="question-number" style="width: 61%; text-align: end;"></div>
+        <h2 id="question"></h2>
+        <div id="options"></div>
+        <button id="nextBtn" onclick="nextQuestion()">Next</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Quiz Hub</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <h1>C Programming Quiz</h1>
+    <p class="subtitle">Select a difficulty level to start</p>
+
+    <div class="container levels">
+        <div class="level-card easy" onclick="startQuiz('easy')" style="display: flex; width: 305px; justify-content: space-between;">
+            <div style="margin-top: 16px; margin-left: 10px;"><img src="./easy-installation (1).png" alt="easy" width="45px"/></div>
+            <div>
+            <h2>Easy</h2>
+            <p>Beginner friendly questions</p></div>
+        </div>
+        <div class="level-card medium" onclick="startQuiz('medium')" style="display: flex; width: 305px; justify-content: space-between;">
+            <div class="icon">⚡</div>
+            <div>
+            <h2>Medium</h2>
+            <p>Intermediate challenge</p></div>
+        </div>
+        <div class="level-card hard" onclick="startQuiz('hard')" style="display: flex; width: 305px; justify-content: space-between;">
+            <div class="icon">🔥</div>
+            <div>
+            <h2>Hard</h2>
+            <p>Expert level questions</p></div>
+        </div>
+    </div>
+
+    <script>
+        function startQuiz(level) {
+            localStorage.setItem("level", level);
+            window.location.href = "quiz.html";
+        }
+    </script>
+</body>
+</html>
