@@ -10,7 +10,7 @@ const optionLetters = ['A.', 'B.', 'C.', 'D.'];
 // Load questions from backend and randomize
 async function loadQuestions() {
     const level = localStorage.getItem("level");
-    const res = await fetch(`http://localhost:5000/api/questions?level=${level}`);
+    const res = await fetch(`https://cquizbackend.onrender.com/api/questions?level=${level}`);
     questions = await res.json();
 
     // Randomize questions
