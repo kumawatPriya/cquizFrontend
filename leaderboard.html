@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Leaderboard | Quiz Hub</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- Protect Page -->
+<script>
+  if (!localStorage.getItem("token")) {
+    window.location.href = "login.html";
+  }
+</script>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">Quiz Hub</div>
+
+  <div class="profile" onclick="toggleProfile()">
+    <img
+      src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+      class="profile-icon"
+      alt="Profile"
+    />
+
+    <div class="profile-dropdown" id="profileDropdown">
+      <p id="userEmail"></p>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+</div>
+
+<!-- LEADERBOARD CONTENT -->
+<div class="container">
+  <h1>🏆 Leaderboard</h1>
+
+  <table border="1" width="100%">
+    <thead>
+      <tr>
+        <th>Rank</th>
+        <th>Name</th>
+        <th>Score</th>
+      </tr>
+    </thead>
+    <tbody id="board"></tbody>
+  </table>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Load user email in topbar
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user) {
+    document.getElementById("userEmail").innerText = user.email;
+  }
+
+  loadLeaderboard();
+});
+
+function toggleProfile() {
+  const dropdown = document.getElementById("profileDropdown");
+  dropdown.style.display =
+    dropdown.style.display === "block" ? "none" : "block";
+}
+
+function logout() {
+  localStorage.clear();
+  window.location.href = "login.html";
+}
+
+// Close dropdown when clicking outside
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".profile")) {
+    document.getElementById("profileDropdown").style.display = "none";
+  }
+});
+
+// Fetch leaderboard data
+async function loadLeaderboard() {
+  try {
+    const res = await fetch(
+      "https://cquizbackend.onrender.com/api/results/leaderboard"
+    );
+
+    const data = await res.json();
+    const board = document.getElementById("board");
+    board.innerHTML = "";
+
+    if (!data.length) {
+      board.innerHTML =
+        `<tr><td colspan="3">No leaderboard data available</td></tr>`;
+      return;
+    }
+
+    data.forEach((u, i) => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${i + 1}</td>
+        <td>${u.name}</td>
+        <td>${u.score}</td>
+      `;
+      board.appendChild(row);
+    });
+
+  } catch (error) {
+    console.error("Error loading leaderboard:", error);
+  }
+}
+</script>
+
+</body>
+</html>

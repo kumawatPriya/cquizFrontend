@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login | Quiz Hub</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="login-wrapper">
+    <div class="login-card">
+      <h2>Welcome Back 👋</h2>
+      <p class="subtitle">Login to continue to <b>Quiz Hub</b></p>
+
+      <input type="email" id="email" placeholder="Enter your email" />
+      <input type="password" id="password" placeholder="Enter your password" />
+
+      <button onclick="login()">Login</button>
+
+      <p class="footer-text">
+        Don’t have an account?
+        <a href="signup.html">Signup</a>
+      </p>
+    </div>
+  </div>
+
+<script>
+async function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const res = await fetch("https://cquizbackend.onrender.com/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.message);
+    return;
+  }
+
+  localStorage.setItem("token", data.token);
+  localStorage.setItem("user", JSON.stringify(data.user));
+
+  window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>

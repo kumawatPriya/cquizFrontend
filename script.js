@@ -7,6 +7,28 @@ let timeLeft = 15;
 
 const optionLetters = ['A.', 'B.', 'C.', 'D.'];
 
+async function saveResult() {
+  try {
+    const token = localStorage.getItem("token");
+
+    await fetch("https://cquizbackend.onrender.com/api/results", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        score: score,
+        totalQuestions: questions.length,
+        level: localStorage.getItem("level")
+      })
+    });
+  } catch (error) {
+    console.error("Error saving result:", error);
+  }
+}
+
+
 // Load questions from backend and randomize
 async function loadQuestions() {
     const level = localStorage.getItem("level");
@@ -20,16 +42,22 @@ async function loadQuestions() {
 }
 
 // Show current question
-function showQuestion() {
+async function showQuestion() {
     const level = localStorage.getItem("level") || "Easy";
 document.getElementById("quiz-level").innerText = `Level: ${level}`;
     answered = false;
 
+    // if (index >= questions.length) {
+    //     localStorage.setItem("score", score);
+    //     window.location.href = "result.html";
+    //     return;
+    // }
     if (index >= questions.length) {
-        localStorage.setItem("score", score);
-        window.location.href = "result.html";
-        return;
-    }
+    await saveResult();
+    localStorage.setItem("score", score);
+    window.location.href = "result.html";
+    return;
+}
 
     const q = questions[index];
 
@@ -66,6 +94,8 @@ document.getElementById("quiz-level").innerText = `Level: ${level}`;
     // Start timer
     startTimer(q.answer);
 }
+
+
 
 // Check selected answer
 function checkAnswer(selectedIndex, correctIndex, button) {

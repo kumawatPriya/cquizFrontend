@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signup | Quiz Hub</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="login-wrapper">
+    <div class="login-card">
+      <h2>Create Account ✨</h2>
+      <p class="subtitle">Join <b>Quiz Hub</b> and start learning</p>
+
+      <input type="text" id="name" placeholder="Enter your name" />
+      <input type="email" id="email" placeholder="Enter your email" />
+      <input type="password" id="password" placeholder="Create password" />
+
+      <button onclick="signup()">Signup</button>
+
+      <p class="footer-text">
+        Already have an account?
+        <a href="login.html">Login</a>
+      </p>
+    </div>
+  </div>
+
+<script>
+async function signup() {
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const res = await fetch("https://cquizbackend.onrender.com/api/auth/signup", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email, password })
+  });
+
+  const data = await res.json();
+
+  if (!res.ok) {
+    alert(data.message);
+    return;
+  }
+
+  alert("Signup successful! Please login.");
+  window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>

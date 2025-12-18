@@ -229,3 +229,203 @@ button:hover {
 .level-card.hard {
     border-top: 5px solid #dc3545;
 }
+/* login page */
+.login-wrapper {
+  width: 100%;
+  max-width: 400px;
+  padding: 20px;
+}
+
+.login-card {
+  background: #ffffff;
+  padding: 30px 25px;
+  border-radius: 12px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.login-card h2 {
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 25px;
+}
+
+.login-card input {
+  width: 85%;
+  padding: 12px 14px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.login-card input:focus {
+  outline: none;
+  border-color: #4facfe;
+}
+
+.login-card button {
+  width: 100%;
+  padding: 12px;
+  background: #4facfe;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-card button:hover {
+  background: #00c6fb;
+}
+
+.footer-text {
+  margin-top: 18px;
+  font-size: 14px;
+  color: #555;
+}
+
+.footer-text a {
+  color: #4facfe;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer-text a:hover {
+  text-decoration: underline;
+}
+
+/* topbar */
+
+.topbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* padding: 12px 20px; */
+    background: #305ea6;
+    color: white;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 0px 20px;
+}
+
+/* Profile */
+.profile-container {
+  position: relative;
+  display: inline-block;
+}
+
+/* Profile Icon */
+.profile {
+  cursor: pointer;
+  padding: 0px 20px;
+}
+
+.profile-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid #4f46e5;
+  padding: 3px;
+  transition: transform 0.3s ease;
+}
+
+.profile-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Dropdown */
+.profile-dropdown {
+  position: absolute;
+  right: 20px;
+  top: 55px;
+  width: 220px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+  display: none;
+  animation: fadeSlide 0.3s ease;
+  overflow: hidden;
+  z-index: 100;
+}
+
+/* Header */
+.profile-header {
+  text-align: center;
+  padding: 15px 10px;
+}
+
+.dropdown-avatar {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+
+.profile-header p {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  word-break: break-all;
+}
+
+.profile-dropdown hr {
+  margin: 0;
+  border: none;
+  border-top: 1px solid #eee;
+}
+
+/* Links */
+.profile-dropdown a {
+  display: block;
+  padding: 12px 15px;
+  text-decoration: none;
+  font-size: 14px;
+  color: #333;
+  transition: background 0.2s ease;
+}
+
+.profile-dropdown a:hover {
+  background: #f4f6ff;
+}
+
+/* Logout Button */
+.profile-dropdown button {
+  width: 95%;
+  border: none;
+  padding: 12px;
+  background: #ae1a1a;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+ 
+}
+
+.profile-dropdown button:hover {
+  background: #dc2626;
+}
+
+/* Animation */
+@keyframes fadeSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

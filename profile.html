@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Profile | Quiz Hub</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<!-- Protect Page -->
+<script>
+  if (!localStorage.getItem("token")) {
+    window.location.href = "login.html";
+  }
+</script>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">Quiz Hub</div>
+
+  <div class="profile" onclick="toggleProfile()">
+    <img
+      src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+      class="profile-icon"
+      alt="Profile"
+    />
+
+    <div class="profile-dropdown" id="profileDropdown">
+      <p id="userEmail"></p>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </div>
+</div>
+
+<!-- PROFILE CONTENT -->
+<div class="container">
+  <h1>My Profile</h1>
+  <p><strong>Email:</strong> <span id="email"></span></p>
+
+  <h2>Quiz History</h2>
+
+  <table style="border: 1;" width="100%">
+    <thead>
+      <tr>
+        <th>Level</th>
+        <th>Score</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody id="history"></tbody>
+  </table>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  // Load user info
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user) {
+    document.getElementById("email").innerText = user.email;
+    document.getElementById("userEmail").innerText = user.email;
+  }
+
+  loadProfile();
+});
+
+function toggleProfile() {
+  const dropdown = document.getElementById("profileDropdown");
+  dropdown.style.display =
+    dropdown.style.display === "block" ? "none" : "block";
+}
+
+function logout() {
+  localStorage.clear();
+  window.location.href = "login.html";
+}
+
+// Close dropdown when clicking outside
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".profile")) {
+    document.getElementById("profileDropdown").style.display = "none";
+  }
+});
+
+// Load quiz history
+async function loadProfile() {
+  try {
+    const token = localStorage.getItem("token");
+
+    const res = await fetch(
+      "https://cquizbackend.onrender.com/api/auth/me",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    const data = await res.json();
+    const tbody = document.getElementById("history");
+    tbody.innerHTML = "";
+
+    if (!data.length) {
+      tbody.innerHTML = `<tr><td colspan="3">No quiz attempts yet</td></tr>`;
+      return;
+    }
+
+    data.forEach(r => {
+      const row = document.createElement("tr");
+
+      row.innerHTML = `
+        <td>${r.level}</td>
+        <td>${r.score}/${r.totalQuestions}</td>
+        <td>${new Date(r.createdAt).toLocaleString()}</td>
+      `;
+
+      tbody.appendChild(row);
+    });
+
+  } catch (error) {
+    console.error("Error loading profile:", error);
+  }
+}
+</script>
+
+</body>
+</html>
