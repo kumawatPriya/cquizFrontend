@@ -45,6 +45,7 @@
         <div id="options"></div>
         <button id="nextBtn" onclick="nextQuestion()">Next</button>
     </div>
+<button id="quitBtn" onclick="quitQuiz()" class="quit-btn">Quit Quiz</button>
 
     <script src="script.js"></script>
     <script>
@@ -79,6 +80,48 @@
                 document.getElementById("profileDropdown").style.display = "none";
             }
         });
+
+        async function quitQuiz() {
+    // Confirm before quitting
+    const confirmQuit = confirm("Are you sure you want to quit the quiz?");
+    if (!confirmQuit) return;
+
+    // Stop timer
+    clearInterval(timer);
+
+    // Save current score and total questions attempted
+    const attemptedQuestions = index; // or index + 1 if you count current
+    await savePartialResult(attemptedQuestions);
+
+    // Save score to localStorage for result page
+    localStorage.setItem("score", score);
+
+    // Redirect to result page
+    window.location.href = "result.html";
+}
+
+// Save partial result
+async function savePartialResult(attemptedQuestions) {
+    try {
+        const token = localStorage.getItem("token");
+
+        await fetch("https://cquizbackend.onrender.com/api/results", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                score: score,
+                totalQuestions: attemptedQuestions,
+                level: localStorage.getItem("level")
+            })
+        });
+    } catch (error) {
+        console.error("Error saving partial result:", error);
+    }
+}
+
     </script>
 </body>
 

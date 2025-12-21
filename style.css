@@ -528,3 +528,17 @@ button:hover {
 .productsTable tbody tr td:first-child {
   text-transform: capitalize;
 }
+
+.quit-btn {
+  background-color: #f44336;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px 0;
+}
+
+.quit-btn:hover {
+  background-color: #d32f2f;
+}
