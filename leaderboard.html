@@ -17,32 +17,56 @@
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="logo">Quiz Hub</div>
+  <div class="logo"><a href="index.html">Quiz Hub</a></div>
 
-  <div class="profile" onclick="toggleProfile()">
-    <img
-      src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
-      class="profile-icon"
-      alt="Profile"
-    />
+  <div class="profile-container">
+    <div class="profile" onclick="toggleProfile()">
+      <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+           alt="Profile" class="profile-icon">
+    </div>
 
     <div class="profile-dropdown" id="profileDropdown">
-      <p id="userEmail"></p>
-      <button onclick="logout()">Logout</button>
+      <div class="profile-header">
+        <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+             class="dropdown-avatar">
+        <p id="userEmail">user@email.com</p>
+      </div>
+
+      <hr>
+
+      <a href="profile.html">👤 My Profile</a>
+      <a href="leaderboard.html">🏆 Leaderboard</a>
+
+      <button onclick="logout()">🚪 Logout</button>
     </div>
   </div>
 </div>
 
 <!-- LEADERBOARD CONTENT -->
 <div class="container">
-  <h1>🏆 Leaderboard</h1>
+  <h1 style="display: flex; align-items: center; margin-bottom: 20px;"><span>🏆</span><span> Leaderboard</span></h1>
 
-  <table border="1" width="100%">
+  <!-- LEVEL FILTER -->
+ <div class="filter-bar">
+  <span class="filter-label">Filter:</span>
+
+  <select id="levelSelect" class="filter-select" onchange="loadLeaderboard()">
+    <option value="">🌍 Global</option>
+    <option value="easy">🟢 Easy</option>
+    <option value="medium">🟡 Medium</option>
+    <option value="hard">🔴 Hard</option>
+  </select>
+</div>
+
+  <table width="100%" class="productsTable">
     <thead>
       <tr>
         <th>Rank</th>
+        <th>Badge</th>
         <th>Name</th>
+        <th>Level</th>
         <th>Score</th>
+        <th>Accuracy</th>
       </tr>
     </thead>
     <tbody id="board"></tbody>
@@ -51,8 +75,6 @@
 
 <script>
 document.addEventListener("DOMContentLoaded", () => {
-
-  // Load user email in topbar
   const user = JSON.parse(localStorage.getItem("user"));
   if (user) {
     document.getElementById("userEmail").innerText = user.email;
@@ -79,30 +101,44 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Fetch leaderboard data
+// Load leaderboard
 async function loadLeaderboard() {
   try {
-    const res = await fetch(
-      "https://cquizbackend.onrender.com/api/results/leaderboard"
-    );
+    const level = document.getElementById("levelSelect").value;
 
+    let url = "https://cquizbackend.onrender.com/api/results/leaderboard";
+    if (level) {
+      url += `?level=${level}`;
+    }
+
+    const res = await fetch(url);
     const data = await res.json();
+
     const board = document.getElementById("board");
     board.innerHTML = "";
 
-    if (!data.length) {
+    if (!data || data.length === 0) {
       board.innerHTML =
-        `<tr><td colspan="3">No leaderboard data available</td></tr>`;
+        `<tr><td colspan="6">No leaderboard data available</td></tr>`;
       return;
     }
 
     data.forEach((u, i) => {
+      let badge = "";
+      if (i === 0) badge = "🥇";
+      else if (i === 1) badge = "🥈";
+      else if (i === 2) badge = "🥉";
+
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${i + 1}</td>
+        <td>${badge}</td>
         <td>${u.name}</td>
+        <td>${u.level}</td>
         <td>${u.score}</td>
+        <td>${u.accuracy}%</td>
       `;
+
       board.appendChild(row);
     });
 

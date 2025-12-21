@@ -17,18 +17,27 @@
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <div class="logo">Quiz Hub</div>
+  <div class="logo"><a href="index.html">Quiz Hub</a></div>
 
-  <div class="profile" onclick="toggleProfile()">
-    <img
-      src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
-      class="profile-icon"
-      alt="Profile"
-    />
+  <div class="profile-container">
+    <div class="profile" onclick="toggleProfile()">
+      <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+           alt="Profile" class="profile-icon">
+    </div>
 
     <div class="profile-dropdown" id="profileDropdown">
-      <p id="userEmail"></p>
-      <button onclick="logout()">Logout</button>
+      <div class="profile-header">
+        <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png"
+             class="dropdown-avatar">
+        <p id="userEmail">user@email.com</p>
+      </div>
+
+      <hr>
+
+      <a href="profile.html">👤 My Profile</a>
+      <a href="leaderboard.html">🏆 Leaderboard</a>
+
+      <button onclick="logout()">🚪 Logout</button>
     </div>
   </div>
 </div>
@@ -40,12 +49,12 @@
 
   <h2>Quiz History</h2>
 
-  <table style="border: 1;" width="100%">
-    <thead>
+  <table style="width: 600px;" class="productsTable">
+    <thead style="text-align: left;">
       <tr>
         <th>Level</th>
         <th>Score</th>
-        <th>Date</th>
+        <th style="width: 35%;">Date</th>
       </tr>
     </thead>
     <tbody id="history"></tbody>
@@ -55,14 +64,14 @@
 <script>
 document.addEventListener("DOMContentLoaded", () => {
 
-  // Load user info
+  // Load user info from localStorage
   const user = JSON.parse(localStorage.getItem("user"));
   if (user) {
     document.getElementById("email").innerText = user.email;
     document.getElementById("userEmail").innerText = user.email;
   }
 
-  loadProfile();
+  loadProfile(); // load quiz history
 });
 
 function toggleProfile() {
@@ -83,13 +92,13 @@ document.addEventListener("click", (e) => {
   }
 });
 
-// Load quiz history
+// LOAD QUIZ HISTORY (CORRECT API)
 async function loadProfile() {
   try {
     const token = localStorage.getItem("token");
 
     const res = await fetch(
-      "https://cquizbackend.onrender.com/api/auth/me",
+      "https://cquizbackend.onrender.com/api/results/my",
       {
         headers: {
           Authorization: `Bearer ${token}`
@@ -101,20 +110,30 @@ async function loadProfile() {
     const tbody = document.getElementById("history");
     tbody.innerHTML = "";
 
-    if (!data.length) {
-      tbody.innerHTML = `<tr><td colspan="3">No quiz attempts yet</td></tr>`;
+    if (!data || data.length === 0) {
+      tbody.innerHTML =
+        `<tr><td colspan="3">No quiz attempts yet</td></tr>`;
       return;
     }
 
     data.forEach(r => {
       const row = document.createElement("tr");
-
       row.innerHTML = `
         <td>${r.level}</td>
         <td>${r.score}/${r.totalQuestions}</td>
-        <td>${new Date(r.createdAt).toLocaleString()}</td>
+     <td>
+  ${new Date(r.createdAt).toLocaleDateString("en-US", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  })}  
+  ${new Date(r.createdAt).toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true
+  })}
+</td>
       `;
-
       tbody.appendChild(row);
     });
 

@@ -6,6 +6,29 @@
 </head>
 <body>
 
+    <div class="topbar">
+            <div class="logo"><a href="index.html" >Quiz Hub</a></div>
+
+            <div class="profile-container">
+                <div class="profile" onclick="toggleProfile()">
+                    <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Profile" class="profile-icon">
+                </div>
+
+                <div class="profile-dropdown" id="profileDropdown">
+                    <div class="profile-header">
+                        <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="dropdown-avatar">
+                        <p id="userEmail">user@email.com</p>
+                    </div>
+
+                    <hr>
+
+                    <a href="profile.html">👤 My Profile</a>
+                    <a href="leaderboard.html">🏆 Leaderboard</a>
+
+                    <button onclick="logout()">🚪 Logout</button>
+                </div>
+            </div>
+        </div>
     <h1>Quiz Result</h1>
 
     <div class="container">
@@ -36,6 +59,39 @@ async function saveResult() {
 
 saveResult();
 </script>
+ <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // Protect page
+            if (!localStorage.getItem("token")) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            // Load user data
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (user) {
+                document.getElementById("userEmail").innerText = user.email;
+            }
+        });
+        function toggleProfile() {
+            const dropdown = document.getElementById("profileDropdown");
+            dropdown.style.display =
+                dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", (e) => {
+            if (!e.target.closest(".profile")) {
+                document.getElementById("profileDropdown").style.display = "none";
+            }
+        });
+    </script>
 
 </body>
 </html>

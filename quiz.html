@@ -1,26 +1,85 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Quiz</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
 </head>
-<body>
 
-    <h1>Quiz</h1>
-<div id="quiz-level" class="quiz-level"></div>
-    <div id="quiz-box" class="container">
-         <div id="progress-container">
-        <div id="progress-bar"></div>
+<body>
+    <div class="topbar">
+        <div class="logo"><a href="index.html">Quiz Hub</a></div>
+
+        <div class="profile-container">
+            <div class="profile" onclick="toggleProfile()">
+                <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" alt="Profile" class="profile-icon" />
+            </div>
+
+            <div class="profile-dropdown" id="profileDropdown">
+                <div class="profile-header">
+                    <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" class="dropdown-avatar" />
+                    <p id="userEmail">user@email.com</p>
+                </div>
+
+                <hr />
+
+                <a href="profile.html">👤 My Profile</a>
+                <a href="leaderboard.html">🏆 Leaderboard</a>
+
+                <button onclick="logout()">🚪 Logout</button>
+            </div>
+        </div>
     </div>
-    <div style="display: flex; justify-content: space-around; width: 100%;">
-    <div id="score-display">Score: 0</div>
-<div id="timer">Time: 15s</div></div>
-<div id="question-number" style="width: 61%; text-align: end;"></div>
+    <h1>Quiz</h1>
+    <div id="quiz-level" class="quiz-level"></div>
+    <div id="quiz-box" class="container">
+        <div id="progress-container">
+            <div id="progress-bar"></div>
+        </div>
+        <div style="display: flex; justify-content: space-around; width: 100%">
+            <div id="score-display">Score: 0</div>
+            <div id="timer">Time: 15s</div>
+        </div>
+        <div id="question-number" style="width: 61%; text-align: end"></div>
         <h2 id="question"></h2>
         <div id="options"></div>
         <button id="nextBtn" onclick="nextQuestion()">Next</button>
     </div>
 
     <script src="script.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // Protect page
+            if (!localStorage.getItem("token")) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            // Load user data
+            const user = JSON.parse(localStorage.getItem("user"));
+            if (user) {
+                document.getElementById("userEmail").innerText = user.email;
+            }
+        });
+        function toggleProfile() {
+            const dropdown = document.getElementById("profileDropdown");
+            dropdown.style.display =
+                dropdown.style.display === "block" ? "none" : "block";
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = "login.html";
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener("click", (e) => {
+            if (!e.target.closest(".profile")) {
+                document.getElementById("profileDropdown").style.display = "none";
+            }
+        });
+    </script>
 </body>
+
 </html>
